@@ -1,1 +1,3 @@
+## Yelp Dataset Terms of Use, we can't distribute the Yelp data. So, we share the link (https://www.kaggle.com/datasets/yelp-dataset/yelp-dataset/versions/6) where anyone can download the same data. Then, this code enables any users to extract the dataset used in the Kim et al. (2024). Once any user downloads the Yelp datasets from the provided link, the user can prepare the same datasets used in the Kim et al. (2024) by running the provided R code.
+
 
