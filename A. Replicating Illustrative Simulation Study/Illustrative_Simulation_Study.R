@@ -1,10 +1,13 @@
+###################################################################################################################
+### This is a full demonstration R code for replicating illustrative simulation study in the Kim et al. (2024). ###
+###################################################################################################################
+## by runnig the below code from top to bottom, you can see the replication results ##
+
 
 #Package Loading#
 
-library(MASS)
 library(mvtnorm)
 library(MCMCpack)
-library(gtools)
 library(cluster)
 
 #######################
@@ -32,6 +35,8 @@ if (length(l)<=1) stop=TRUE
 list("mu"=as.matrix(mu),"H"=H,"z"=as.matrix(z),"d"=d)
 }#reorder
 
+set.seed(1003)
+
 #######################################################
 ## Generating Simulation Data p=100, n=1000, 3 topic across 3 segments
 #######################################################
@@ -48,9 +53,9 @@ X=matrix(sample(c(1,0), p*n, replace = TRUE, prob=c(0.4,0.6)),n,p)
 tau2_t=1;
 z_t=matrix(0,p,K);
 mu_t=matrix(0,p,K);
-
 H_t=sample(1:K,n,replace=TRUE,d_t)
 
+## reordering ##
 newp=reorder(mu_t,H_t,z_t,d_t);
 mu_t=newp$mu;
 H_t=newp$H;
@@ -64,30 +69,22 @@ id=1:n
 idk_s=list()
 dm=list()
 
-
 for (k in 1:K){
 
-#number of variables as a dimension per each K
 group=list()
 gr.f <- sample(2:p, (p1*G) , replace = FALSE) #group features
 
 for (g in 1:G){
-
-group[[g]] <- gr.f[(g+(4*(g-1))):(g*p1)] #a dimension of the selected variables (cooccurring words)
-
+group[[g]] <- gr.f[(g+(4*(g-1))):(g*p1)] ##a dimension of the selected variables (cooccurring words)
 } # for g
 
 dm[[k]]<-group
 
 idk_s[[k]]=id[H_t==k]
-
 idkk <- idk_s[[k]]
 
-
 idnk<-length(idkk)
-
 tmpX<-X[idkk,]
-
 
 for (g in 1:G){
 
@@ -106,7 +103,6 @@ tmpX[v,dmk]=sample(c(0,1), p1, replace = TRUE, prob=c(0.7,0.3))
 } # else
 
 } ## v
-
 } #for g
 
 X[idkk,]=tmpX
@@ -115,9 +111,6 @@ X[idkk,]=tmpX
 
 X1<-X
 X1[X>0]=1
-#dist(t(X1[idk_s[[k]],]))
-
-#X<-scale(X*sample(1:5,n*p, replace = TRUE, prob=c(0.4,0.3,0.1,0.1,0.1)))
 
 X<-(X*sample(1:5, n*p, replace = TRUE, prob=c(0.4,0.3,0.1,0.1,0.1)))
 
@@ -126,15 +119,14 @@ for (i in 1:n){
 check[i]=sum(X[i,])
 }
 
-which(check==0) #checking the word matrix
+which(check==0) #checking if the word matrix includes any rows with all zeros
 
 ps<-round(p*0.01,0)
 
-
-
 mu_t=matrix(0,p,K); 
 
-mu_t[1,1]=1
+## set intercept values
+mu_t[1,1]=1 
 mu_t[1,2]=2
 mu_t[1,3]=3
 
@@ -147,16 +139,15 @@ mu_t[dm[[k]][[g]],k]=runif(p1,1,3);
 
 ps<-round(p*0.05,0)
 
-
 z_t=matrix(0,n,K)
 z_t[mu_t>0]=1
 
 mu_t1<-mu_t
 z_t1<-z_t
 
-#sig2_t=sum(mu_t^2)/K/40;
 sig2_t=0.01
 
+## generating Y (DV)
 for(i in 1:n)
 Y[i]=X[i,]%*%mu_t[,H_t[i]]+rnorm(1,0,sqrt(sig2_t))
 Y_t=Y
@@ -165,14 +156,12 @@ Y_t=Y
 ######### Data Generation by here ####
 ######################################
 
-
 ##Pre-specifying############################
 
 K=3 # number of Segments
 
-T0=2000 #Burn-in
-T=2000 #Sampling
-
+T0=2000 #N of Burn-in
+T=2000 #N of posterior Sampling
 
 
 #### sensitivity hyperparameters
@@ -199,16 +188,16 @@ postnk=matrix(0,T,K);
 postp=matrix(0,m,n);
 setidT=array(0,c(p,p,K,T))
 
-#initionation
+#initialization
 d=theta/sum(theta);
 tau2=rep(rinvgamma(1,sp1,sp2),p);
 w=0.5;
 sig2=rinvgamma(1,r1,r2);
-
 z=matrix(as.numeric(runif(p*K)>w), p,K);
 mu=matrix(rnorm(p*K,0,1),p,K);
 H=sample(1:K, n, replace=T, prob=d)
 
+########## reordering ###
 newp=reorder(mu,H,z,d);
 mu=newp$mu;
 H=newp$H;
@@ -305,7 +294,6 @@ bt[j]=bw1*sum(z[j,])/2+sp2
 tau2[j]=rinvgamma(1,at[j],bt[j]);
 }
 
-
 ########## sample H and d ##################
 d=as.vector(rdirichlet(1, nk+theta));
 
@@ -320,7 +308,6 @@ wp[k,]=wp[k,]*d[k]
 for (i in 1:n){
 H[i]=sample(1:K,1,replace=TRUE,wp[,i])
 }
-
 
 ########## reordering ##################
 
@@ -343,16 +330,13 @@ postsig2=c(postsig2,sig2)
 postd[tmpT,]=d
 postH[tmpT,]=H;
 postnk[tmpT,]=nk;
-
 setidT[,,,tmpT]<-setidS ## selected neighbors per each variable across all MCMC runs
 
 }
-
 } # End of MCMC
 
 
 ## Posterior mean of beta ##
-
 ss=matrix(0,p,K) 
 for (i in 1:p)
 for (j in 1:K)
@@ -361,7 +345,6 @@ ss[i,j]=mean(postmu[i,j,])
 } 
 
 ## Posterior mean of Z ##
-
 tt=matrix(0,p,K)
 for (i in 1:p)
 for (j in 1:K)
@@ -369,23 +352,20 @@ for (j in 1:K)
 tt[i,j]=mean(postz[i,j,])
 }
 
-
 ## finding membership for H 
-
 memb=rep(0,n)
 for (i in 1:n)
 memb[i]<-as.numeric(names(table(postH[,i]))[which.max(table(postH[,i]))]) 
 table(memb) 
 
 
-##############################
-## finding neighbor structure
-###############################
-## finding dimensions -- post-hoc searching ##
+#########################################
+## post-hoc searching         ###########
+## finding topics (neighbor structure)###
+#########################################
 
 
-dim(setidT)
-
+dim(setidT) ## selected neighbors per each variable
 
 joint_D <- array(0,c(p,p,K)) 
 
@@ -407,7 +387,6 @@ P_dim=array(0,c(p,p,K))
 
 ## find segmentment-level neighborsets!
 
-
 for (k in 1:K){
 for(j in 1:p){
 pdim = which(joint_D[j,,k] > (cut*T)) # probabilistic segment-level neighbors 
@@ -417,13 +396,15 @@ ssel<-setdiff(sel_t, pdim0)
 if(sum(pdim0)>0){
 P_dim[j,1:length(pdim0),k]<-pdim0} #Co-occuring selected variables; as cooccuring variables are active...
 }
-} #selected neighbors per each j word
+}
 
-###############################################
-#### Generating dendrogram for each segment####
-###############################################
+#selected neighbors per each j word
 
-k=1 # for each segment; please change k value from 1 to 3 
+############################################################
+#### Generating dendrogram of neighbors for each segment####
+############################################################
+
+k=1 # for each segment; please change k value from 1, 2 and 3 
  
 dist_R=rep(0,K)
 
@@ -433,9 +414,7 @@ for (j in 1:p){
 
 tmp_i<- P_dim[j,,k]
 symm_M[j,tmp_i]=1
-
 }
-
 colnames(symm_M)<-as.character(1:p)
 rownames(symm_M)<-as.character(1:p)
 
@@ -456,9 +435,10 @@ plot(seg.hc) #resulting tree dendrogram
 
 rect.hclust(seg.hc, k=3, border="red")
 
-## compare the identified dimensions (groups of frequently co-occurring words) with true dimensions
+## Now, let's compare and check the identified dimensions (groups of frequently co-occurring words) with true dimensions
 
 dm[[k]] ## information of true dimensions
+
 
 
 
