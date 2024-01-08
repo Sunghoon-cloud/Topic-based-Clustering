@@ -2,15 +2,15 @@ This repo provides the source codes and the three datasets to help any model use
 
 A. Replicating Illustrative Simulation study in Kim et al. (2024)
 
- Illustrative_Simulation_Study.R
+  Illustrative_Simulation_Study.R
 
-:From the top to bottom, this R code includes 
+ From the top to bottom, this R code includes: 
   (1) generating a simulation data described in Kim et al. (2024) 
   (2) estimating the topic-based segmentation model
   (3) identifying topics (frequently co-occurring neighbor words)
   (4) generating hierarchical dendrograms as shown in figure 2 in the paper
  
-At the end, we can check identified dimensions compared with the true dimensions.  
+ At the end, we can check identified dimensions compared with the true dimensions.  
 
 
 B. Packages 
