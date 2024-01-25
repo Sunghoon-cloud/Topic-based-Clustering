@@ -1,1 +1,0 @@
-# This code extracts the dataset (e.g., Arizona-based restaurant brands with more than 10 reviews) from the original Yelp data for restaurant-level segmentation analysis in the first empirical application study section.  
