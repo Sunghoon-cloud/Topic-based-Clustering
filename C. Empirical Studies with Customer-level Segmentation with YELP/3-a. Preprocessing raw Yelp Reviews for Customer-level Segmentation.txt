@@ -1,0 +1,95 @@
+## download and import Yelp data from the following link (https://www.kaggle.com/datasets/yelp-dataset/yelp-dataset/versions/6) 
+
+library(tm)
+
+setwd("F:/Work_Research and Teaching/Rutgers University/Fall 2021/JMR 2021 Revision/Final Results and Data set for 2nd revision Prof and Yelp/Yelp Empirical results/yelp-dataset_csv")
+
+
+
+business<-read.csv("yelp_business.csv",head=TRUE)
+reviews<-read.csv("yelp_review.csv",head=TRUE)
+users<-read.csv("yelp_user.csv",header=TRUE)
+hours<-read.csv("yelp_business_hours.csv",header=TRUE)
+
+
+
+##############################################################
+### Preparing Customer-level Reviews for Bianco Restaurant ###
+##############################################################
+
+business_AZ=business[which(business[,6]=="AZ"),]
+
+Restaurants_AZ=business_AZ[grepl("Restaurants",business_AZ[,13]),]
+
+summary(Restaurants_AZ[,11])
+
+which.max(Restaurants_AZ[,11])
+
+Restaurants_AZ[8917,] ### a Bianco restaurant with the largest reviews
+
+
+PizzaBianco<-reviews[which(reviews[,3] == Restaurants_AZ[8917,1]),]
+
+
+n=dim(PizzaBianco)[1]
+
+
+#########################################################
+### Preprocessing from texts to word frequency matrix ###
+#########################################################
+
+
+subdata=data.frame(doc_id=as.character(1:n),text=PizzaBianco[,6]) #extract only textual reviews
+
+
+TMD=VCorpus(VectorSource(subdata$text)) #without DataframeSource...
+
+#Representing and computing on corpora. 
+#Corpora are collections of documents containing (natural language) text
+
+TMD[[1]]$content
+TMD[[1]]$meta ## additional informaiton for this text
+
+##some preprocessing
+TMD <- tm_map(TMD, content_transformer(tolower)) ## change to lower case
+TMD <- tm_map(TMD, removeWords, stopwords("english")) #remove stopwords
+TMD <- tm_map(TMD, stemDocument, language="english") ## stemming words
+TMD <- tm_map(TMD, stripWhitespace) #Strip extra whitespace from a text document.
+TMD <- tm_map(TMD, removeNumbers)
+TMD <- tm_map(TMD, removePunctuation)
+TMD <- tm_map(TMD, removeWords, c("does","not","thing","asu")) #remove additional unnecessary words selected by users. 
+
+
+
+## creat word matrix ###
+TMDM=TermDocumentMatrix(TMD,control = list(removePunctuation = TRUE,stopwords = TRUE))
+
+
+## Compute frequency distance ##
+dtmss <- removeSparseTerms(TMDM, 0.95) ## remove less than 10% appearance
+
+dtmss0<-t(as.matrix(dtmss))
+
+p=dim(dtmss0)[2]
+
+checkrow=rep(0,n)
+for (i in 1:n){
+
+checkrow[i]=sum(dtmss0[i,])
+
+}
+
+which(checkrow==0) #check any rows with all zeros
+
+colnames(dtmss0)
+
+checkcol=rep(0,p)
+for (j in 1:p){
+
+checkcol[j]=sum(dtmss0[,j])
+
+}
+
+data_Bianco=cbind(PizzaBianco[,-6],dtmss0)
+
+write.csv(data_Bianco,"data_Bianco.csv")
