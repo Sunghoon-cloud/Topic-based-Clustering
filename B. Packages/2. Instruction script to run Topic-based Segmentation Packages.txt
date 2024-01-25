@@ -1,0 +1,104 @@
+Sample Simulation Dataset:
+
+Simple example dataset has been generated based on following true coefficient Values.
+Here, we assumed three segments and 20 independent variables and a subset of variables are assumed as active ones per segment.
+
+
+IVs  [Seg1] [Seg2]
+ [1,] 1.000 2.000
+ [2,] 2.347 2.343
+ [3,] 0.000 2.499
+ [4,] 1.382 2.934
+ [5,] 0.000 2.695
+ [6,] 0.000 1.203
+ [7,] 2.167 0.000
+ [8,] 1.942 1.281
+ [9,] 0.000 0.000
+[10,] 2.294 0.000
+[11,] 2.428 0.000
+[12,] 0.000 2.657
+[13,] 1.386 0.000
+[14,] 0.000 0.000
+[15,] 0.000 2.136
+[16,] 0.000 2.295
+[17,] 0.000 0.000
+[18,] 2.239 0.000
+[19,] 1.090 1.733
+[20,] 2.408 0.000
+
+
+True Topics (groups of co-occurring words) are below!
+
+Segment 1
+
+[Words in Topic 1]  7 11  8  4 20
+
+[Words in Topic 2] 18  2 13 10 19
+
+
+Segment 2
+
+[Words in Topic 1]  4  8  6 19  2
+
+[Words in Topic 2]  3 12 16 15  5
+
+
+
+################################################################
+###R Running Script For Topic-based Segmentation Regression ####
+### Latent Class Regression with Group Variable Selection ######
+################################################################
+
+  
+### you need to install the following packages first: 
+
+library(MASS)
+library(mvtnorm)
+library(MCMCpack)
+
+## Please download the following two R packages and import them  
+
+source("Package_Topic-based_Segmentation.R") ## R package for topic-based Segmentation model : Latent class regression with Group variable selection
+source("Package_Dendrogram_Dimensions.R")
+
+
+data<-read.csv("sample_data.csv", head=TRUE) ## import dataset
+
+Y<-data[,1] #DV
+X<-as.matrix(data[,2:21]) ## independent variables
+
+## Plesae note, if you want to use your empirical data, you should add intercept by using following code
+
+# X<-cbind(1, your_X.matrix)
+
+
+K=2 #number of segmenet
+
+Opt_Hyper<-(list("sp1"=1,"sp2"=1,"r1"=1,"r2"=0.01, "J" = 0.01, "cutoff"=0.3)) ## default setting, you can change the setting for hyperparameters.
+
+topic_result<-Topic_Bayes_Mixture(Y,X,K,T0=2000,T=2000, Opt_Hyper) ## this is main function for runing the latent class regression with group variable selection. 
+
+
+ss <-topic_result$ss ## Segment level Coeffs; plesae compare this with the true coeffs 
+round(ss,3)
+
+memb<-topic_result$memb  # segment memberships
+table(memb)/length(Y) # proportion of segments
+
+
+## for generating figures of dendrograms for identifying topics:
+
+setidT<-topic_result$setidT # selected neighbors
+tt<-topic_result$tt ## variable seleciton matrix 
+
+Dendrograms(setidT,tt,K) ## generate dendrograms
+
+### please check if the true groups of variables are identified by comparting the dendrograms with the True Topics above. 
+
+## if you want to compute LML (Chib's method), please include LML as follows:
+
+topic_result<-Topic_Bayes_Mixture(Y,X,K=2,T0=2000,T=2000,Opt_Hyper,LML)
+
+topic_result$LML # print LML value
+
+
