@@ -38,7 +38,7 @@ Note, given the terms of agreement by YELP, we provide the link to download the 
 	
    (file)<i> 3-b. Instruction for replicating Customer-level Segmentation analysis.txt</i>
 
-: This is instruction script for replicating customer-level segmentation study with Yelp
+: This is instruction script for replicating customer-level segmentation study by using the provided packages.
 
 <b> D. Empirical Studies of Restaurant-level Segmentation with YELP </b> (this folder includes 2 files)
 
@@ -50,7 +50,7 @@ The provided codes below help replicate the restaurant-level segmentation result
 
  (file)  <i> 4-b. Instruction for replicating restaurant-level segmentation analysis.txt</i>
 
-: This is instruction script for replicating restaurant-level segmentation study with Yelp
+: This is instruction script for replicating restaurant-level segmentation study by using the provided packages.
 
 <b> E. Empirical application study with ProfessorRatings</b>  (this folder includes 2 files)
 
