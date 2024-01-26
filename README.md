@@ -4,7 +4,7 @@ This repo provides the R package with sample data and instruction script to help
 
  (file)<i> 1. Full codes for replicating Illustrative simulation study.R</i>
 
-: By running this source codes from begining to the bottom in R, you can replicate the illustrative simulation study in the paper. [see Table 2 and Figure 2 in main text]
+: By running this source codes from begining to the bottom in R, you can replicate the illustrative simulation study in the paper. [see Table 2 and Figure 2 in main text of the paper]
 
 This R code file includes (1) codes for generating for a simulation data, (2) codes for estimating the topic-based segmentation model, (3) codes for 	identifying topics (frequently co-occurring neighbor words), and (4) codes for generating hierarchical dendrograms as shown in figure 2 in the paper.
  
@@ -38,7 +38,7 @@ Note, given the terms of agreement by YELP, we provide the link to download the 
 	
    (file)<i> 3-b. Instruction for replicating Customer-level Segmentation analysis.txt</i>
 
-: This is instruction script for replicating customer-level segmentation study by using the provided packages. [see Table 10 in main text; Tables F-1, F-2, and F-3 and Figure F-1 in Web Appendix]
+: This is instruction script for replicating customer-level segmentation study by using the provided packages. [see Table 10 in main text; Tables F-1, F-2, and F-3 and Figure F-1 in the Web Appendix]
 
 
 <b> D. Empirical Studies of Restaurant-level Segmentation with YELP </b> (this folder includes 2 files)
@@ -51,17 +51,16 @@ The provided codes below help replicate the restaurant-level segmentation result
 
  (file)  <i> 4-b. Instruction for replicating restaurant-level segmentation analysis.txt</i>
 
-: This is instruction script for replicating restaurant-level segmentation study by using the provided packages. [see Tables 5, 6 and 7 in main text; Tables E-4 and E-5 and Figure H-1 in Web Appendix]
+: This is instruction script for replicating restaurant-level segmentation study by using the provided packages. [see Tables 5, 6 and 7 in main text; Tables E-4 and E-5 and Figure H-1 in Web Appendices]
 
 
 <b> E. Empirical application study with ProfessorRatings</b>  (this folder includes 2 files)
 
 (file)   <i>5. Instructions for replicating Professor ratings review study.txt</i>
 
-: This is instruction script to replicate the Professor ratings reviews study by using the provided packages in Web Appendix. [see Tables G-1, G-2, G-4 and G-5, and Figures G-1 and H-2 in Web Appendix]
+: This is instruction script to replicate the Professor ratings reviews study by using the provided packages in Web Appendix. [see Tables G-1, G-2, G-4 and G-5, and Figures G-1 and H-2 in Web Appendices]
 
 
 (file)   <i> Professor_ratings_words_freq.csv</i>
 
 : Data file of Ratings and word frequency matrix extracted from the Professor ratings reviews which were scrapped by the author.
-
