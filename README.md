@@ -10,7 +10,7 @@ This R code file includes (1) codes for generating for a simulation data, (2) co
  
 <b> B. Model Packages</b>  (this folder includes four files)
 
-We developed user-friendly packages with a simple sample simulation data which can help any model users simply apply the package to their datasets. In this folder we included following four files. [see Table 5, Table 6 and Table 7 in main text]
+We developed user-friendly packages with a simple sample simulation data which can help any model users simply apply the package to their datasets. In this folder we included following four files. 
 
 (file)<i>  2. Instruction script to run Topic-based Segmentation Packages.txt</i>
  	
@@ -18,11 +18,11 @@ We developed user-friendly packages with a simple sample simulation data which c
 	
   (file) <i> Package_Topic-based_Segmentation.R</i> 
 
-: This is a function package for topic-based segmentation (i.e., latent class regression with group variable selection). [see Table 5, Table 6, Table 7, and Table 10 in main text]
+: This is a function package for topic-based segmentation (i.e., latent class regression with group variable selection). [see Tables 5, 6, 7, and 10 in main text; Tables E-4, E-5, F-1, F-2, F-3, G-1, G-2, G-4 and G-5 in Web Appendices]
 
  (file)  <i> Package_Dendrogram_Dimensions.R</i>
 
-: This is a package for generating dendrogram for identifying topics.[see Figure 3 in main text; Figures F-1 and G-1 in Web Appendix]
+: This is a package for generating dendrogram for identifying topics.[see Figure 3 in main text; Figures F-1 and G-1 in Web Appendices]
 
   (file) <i> sample_data.csv</i>
 
@@ -63,4 +63,5 @@ The provided codes below help replicate the restaurant-level segmentation result
 
 (file)   <i> Professor_ratings_words_freq.csv</i>
 
-: Data file of Ratings and word frequency matrix extracted from the Professor ratings reviews which were scrapped by author.
+: Data file of Ratings and word frequency matrix extracted from the Professor ratings reviews which were scrapped by the author.
+
