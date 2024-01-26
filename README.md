@@ -1,50 +1,63 @@
-This repo provides the source codes and the three datasets to help any model users to replicate the results in Kim et al. (2024) "A Topic-based Segmentation Model for Identifying Segment-Level Drivers of Star Ratings from Unstructured Text Reviews", the Journal of Marketing Research  
+This repo provides the R package with sample data and instruction script to help any potential users to use the methods introduced in Kim et al. (2024) "A Topic-based Segmentation Model for Identifying Segment-Level Drivers of Star Ratings from Unstructured Text Reviews", the Journal of Marketing Research. Also, this repo includes source codes and datasets for replicating the results in ther paper. This repo includes 5 parts as below.  
 
-A. Replicating Illustrative Simulation study in Kim et al. (2024)
+A. Replicating Illustrative Simulation study (this folder includes one file)
 
-  Illustrative_Simulation_Study.R
+   1. Full codes for replicating Illustrative simulation study.R
+	
+	: By running this source codes from begining to the bottom in R, you can replicate the illustrative simulation study in the paper 
 
- From the top to bottom, this R code includes: 
-  (1) generating a simulation data described in Kim et al. (2024) 
-  (2) estimating the topic-based segmentation model
-  (3) identifying topics (frequently co-occurring neighbor words)
-  (4) generating hierarchical dendrograms as shown in figure 2 in the paper
+	This R code file includes (1) codes for generating for a simulation data, (2) codes for estimating the topic-based segmentation model, (3) codes for 	identifying topics (frequently co-occurring neighbor words), and (4) codes for generating hierarchical dendrograms as shown in figure 2 in the paper
  
- At the end, we can check identified dimensions compared with the true dimensions.  
+B. Model Packages (this folder includes four files)
 
+	We developed user-friendly packages with a simple sample simulation data which can help any model users simply apply the package to their datasets. In this folder we included following four files. 
 
-B. Packages 
+   2. Instruction script to run Topic-based Segmentation Packages.txt
+  	
+	: This is Instruction for running the two packages of "Package_Topic-based_Segmentation.R" and "Package_Dendrogram_Dimensions.R" with a simple sample data for helping any users to apply the model to their datasets.
+	
+   Package_Topic-based_Segmentation.R
 
-We developed user-friendly packages with a simple sample simulation data for helping easy application.
+	: This is a function package for topic-based segmentation (i.e., latent class regression with group variable selection).
 
-(B-1) Preprocessing Text.R
-: This is the R code to extract word-frequency matrix (X) from unstructured text reviews. The step should be employed to the outputs of (A-2) step before running the Topic based Segmentation Model to preprocess the unstructured review texts. Any users need to run these codes before running the main model code of (B-2) for all empirical studies (1. restaurant-level segmentation, 2. customer-level segmentation, 3. professor segmentation). 
+   Package_Dendrogram_Dimensions.R
 
-(B-2) Topic-based Segmentation Model.R
-This is the main R code of the Topic based Segmentation Model estimates the sequential choice model by calling "Est_SCM_202105.R".
+	: This is a package for generating dendrogram for identifying topics.
 
-(B-3) Identifying_Dimensions.R
-This is the R code of post-hoc analyses to identify dimensions by generating dendrograms (akin to heatmap) to understand co-occurrence structure between words.
+   sample_data.csv
 
+	: This is a sample data. True parameter values are presented in the "2. Instruction script to run Topic-based Segmentation Packages.txt".
 
-C. Empirical application studies with YELP
+C. Empirical Studies of Customer-level Segmentation with YELP (this folder includes 2 files)
 
-Yelp Dataset Terms of Use, we can't distribute the Yelp data. So, we share the link (https://www.kaggle.com/datasets/yelp-dataset/yelp-dataset/versions/6) where anyone can download the same data. Then, this code enables any users to extract the dataset used in the Kim et al. (2024). Once any user downloads the Yelp datasets from the provided link, the user can prepare the same datasets used in the Kim et al. (2024) by running the provided R code.
+Note, given the terms of agreement by YELP, we provide the link to download the same Yelp datasets (https://www.kaggle.com/datasets/yelp-dataset/yelp-dataset/versions/6) used in Kim et al. (2024). The provided codes below help replicate the customer-level segmentation results with the raw Yelp data downloaded from the link. 
 
-   (C-1) Instruction for replicating Yelp Empirical Study in Kim et al. (2024) 
+   3-a. Preprocessing raw Yelp Reviews for Customer-level Segmentation.txt
 
-   (C-2) Process_Arizona_Restaurant_Brands.R 
-This code extracts the dataset (e.g., Arizona-based restaurant brands with more than 10 reviews) from the original Yelp data for restaurant-level segmentation analysis in the first empirical application study section.  
+	: This is R code for preprocessing the downloaded Yelp data and building DV and IVs matrix for customer-level segmentation study. 
+	
+   3-b. Instruction for replicating Customer-level Segmentation analysis.txt
 
-   (C-3) Process_One_Restaurant_Largest_Reviews.R 
-This code extract the dataset (e.g., An Italian restaurant with the largest number of reviews) from the original Yelp data for customer-level segmentation study in the second empirical application study. If model user wants to see the results relatively quickly, the dataset is recommended given the size is smaller and running time is faster. 
+	: This is instruction script for replicating customer-level segmentation study with Yelp
 
-D. Empirical application study with ProfessorRatings
+D. Empirical Studies of Restaurant-level Segmentation with YELP (this folder includes 2 files)
 
-   (D-1) Instruction for replicating ProfessorRating Empirical Study in Web Appendix of Kim et al. (2024)
+The provided codes below help replicate the restaurant-level segmentation results with the raw Yelp data downloaded from the link. 
 
-   (D-2) Process_ProfessorRatings.R  
-This code helps to prepare ProfessorRating Empirical Study in Web Appendix of Kim et al. (2024)
+   4-a. Preprocessing raw Yelp reviews_Restaruant Segmentation.txt
 
-   (D-3) Professor_Rating.rds
-This is the R data for Professor Ratings Review.
+	: This is R code for preprocessing the downloaded Yelp data and building DV and IVs matrix for restaurant-level segmentation study.
+
+   4-b. Instruction for replicating restaurant-level segmentation analysis.txt
+
+	: This is instruction script for replicating restaurant-level segmentation study with Yelp
+
+E. Empirical application study with ProfessorRatings (this folder includes 2 files)
+
+   5. Instructions for replicating Professor ratings review study.txt
+
+	: This is instruction script to replicate the Professor ratings reviews study in Web Appendix.
+
+   Professor_ratings_words_freq.csv
+
+	: Ratings and word frequency matrix extracted from the Professor ratings reviews which were scrapped by author.
