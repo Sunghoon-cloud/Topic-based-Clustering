@@ -30,7 +30,7 @@ We developed user-friendly packages with a simple sample simulation data which c
 
 <b> C. Empirical Studies of Customer-level Segmentation with YELP </b> (this folder includes 2 files)
 
-Note, given the terms of agreement by YELP, we provide the link to download the same Yelp datasets (https://www.kaggle.com/datasets/yelp-dataset/yelp-dataset/versions/6) used in Kim et al. (2024). The provided codes below help replicate the customer-level segmentation results with the raw Yelp data downloaded from the link. 
+Note, given the dataset terms of use by YELP, we provide the link to download the same Yelp datasets (https://www.kaggle.com/datasets/yelp-dataset/yelp-dataset/versions/6) used in Kim et al. (2024). The provided codes below help replicate the customer-level segmentation results with the raw Yelp data downloaded from the link. 
 
  (file)  <i> 3-a. Preprocessing raw Yelp Reviews for Customer-level Segmentation.txt</i>
 
