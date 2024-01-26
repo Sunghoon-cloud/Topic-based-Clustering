@@ -60,4 +60,4 @@ The provided codes below help replicate the restaurant-level segmentation result
 
 (file)   <i> Professor_ratings_words_freq.csv</i>
 
-: Ratings and word frequency matrix extracted from the Professor ratings reviews which were scrapped by author.
+: Data file of Ratings and word frequency matrix extracted from the Professor ratings reviews which were scrapped by author.
