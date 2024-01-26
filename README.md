@@ -56,7 +56,7 @@ The provided codes below help replicate the restaurant-level segmentation result
 
 (file)   <i>5. Instructions for replicating Professor ratings review study.txt</i>
 
-: This is instruction script to replicate the Professor ratings reviews study in Web Appendix.
+: This is instruction script to replicate the Professor ratings reviews study by using the provided packages in Web Appendix.
 
 (file)   <i> Professor_ratings_words_freq.csv</i>
 
