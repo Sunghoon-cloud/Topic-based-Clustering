@@ -1,6 +1,6 @@
 This repo provides the R package with sample data and instruction script to help any potential users to use the methods introduced in Kim et al. (2024) "A Topic-based Segmentation Model for Identifying Segment-Level Drivers of Star Ratings from Unstructured Text Reviews", the Journal of Marketing Research. Also, this repo includes source codes and datasets for replicating the results in ther paper. This repo includes 5 parts as below.  
 
-<b> A. Replicating Illustrative Simulation study </b>  (this folder includes one file)
+<b> A. Replicating Illustrative Simulation study </b> (this folder includes one file)
 
  (file)<i> 1. Full codes for replicating Illustrative simulation study.R</i>
 
