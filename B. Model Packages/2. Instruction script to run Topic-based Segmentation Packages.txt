@@ -1,7 +1,7 @@
 Sample Simulation Dataset:
 
-Simple example dataset has been generated based on following true coefficient Values.
-Here, we assumed three segments and 20 independent variables and a subset of variables are assumed as active ones per segment.
+Simple example dataset has been generated based on following true coefficient Values of 20 words.
+Here, we assumed two segments and 20 words are assumed. 
 
 
 IVs  [Seg1] [Seg2]
@@ -31,16 +31,16 @@ True Topics (groups of co-occurring words) are below!
 
 Segment 1
 
-[Words in Topic 1]  7 11  8  4 20
+[Co-occurring Group Words in Topic 1]  7 11  8  4 20
 
-[Words in Topic 2] 18  2 13 10 19
+[Co-occurring Group Words in Topic 2] 18  2 13 10 19
 
 
 Segment 2
 
-[Words in Topic 1]  4  8  6 19  2
+[Co-occurring Group Words in Topic 1]  4  8  6 19  2
 
-[Words in Topic 2]  3 12 16 15  5
+[Co-occurring Group Words in Topic 2]  3 12 16 15  5
 
 
 
@@ -100,5 +100,4 @@ Dendrograms(setidT,tt,K) ## generate dendrograms
 topic_result<-Topic_Bayes_Mixture(Y,X,K=2,T0=2000,T=2000,Opt_Hyper,LML)
 
 topic_result$LML # print LML value
-
 
