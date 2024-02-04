@@ -1,6 +1,7 @@
 ## download and import Yelp data from the following link (https://www.kaggle.com/datasets/yelp-dataset/yelp-dataset/versions/6) 
 
 library(tm)
+library(hunspell)
 
 setwd("F:/Work_Research and Teaching/Rutgers University/Fall 2021/JMR 2021 Revision/Final Results and Data set for 2nd revision Prof and Yelp/Yelp Empirical results/yelp-dataset_csv")
 
