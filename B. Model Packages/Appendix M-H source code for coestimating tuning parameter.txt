@@ -1,0 +1,433 @@
+
+#Package Loading#
+
+library(MASS)
+library(mvtnorm)
+library(MCMCpack)
+library(IsingSampler)
+
+
+#######################
+#Function Reordering###
+#######################
+reorder<-function(mu,H,z,d){
+K=ncol(mu)
+p=nrow(mu)
+n=length(H)
+stop=FALSE;l=1:K
+#id=1:K;
+for (i in 1:p){
+if (stop) break;
+lc=l[order(mu[i,l])]
+mutemp=mu;Htemp=H;dtemp=d;ztemp=z;
+for (t in 1:length(lc)){
+mu[,l[t]]=mutemp[,lc[t]];
+z[,l[t]]=ztemp[,lc[t]];
+H[Htemp==lc[t]]=l[t];
+d[l[t]]=dtemp[lc[t]];
+}
+l=sort(l[mu[i,l]==0])
+if (length(l)<=1) stop=TRUE 
+}
+list("mu"=as.matrix(mu),"H"=H,"z"=as.matrix(z),"d"=d)
+}#reorder
+
+
+set.seed(100)
+
+
+## Let's import sample dataset
+data<-read.csv("sample_data.csv", head=TRUE)
+
+
+### see true coeffs values and true group of words of the sample data in "2. Instruction script to run Topic-based Segmentation Packages" 
+
+Y<-data[,1] #DV
+X<-as.matrix(data[,2:21]) ## independent variables
+
+
+##Pre-specifying############################
+
+K=2 # true number of segment in sample data, 
+
+
+T0=2000 #Burn-in
+T=3000 #Sampling
+
+
+
+#### sensitivity hyperparameters
+sp1=1;sp2=1;r1=1;r2=0.01; 
+
+theta=rep(1,K);
+liks=NULL;m=1;marls=NULL
+
+#dimensions
+n=length(Y);
+p=dim(X)[2];
+
+#instore posterior sampling
+#postalp=NULL;
+postz=array(0,c(p,K,T))
+postmu=array(0,c(p,K,T))
+posttau2=matrix(0,T,p);
+postw=NULL;
+postsig2=NULL;
+postd=matrix(0,T,K);
+postpx=NULL;
+postH=matrix(0,T,n);
+postnk=matrix(0,T,K);
+postp=matrix(0,m,n);
+
+setidT=array(0,c(p,p,K,T))
+
+postJ = array(0, c(p,K,T))
+
+#initionation
+d=theta/sum(theta);
+tau2=rep(rinvgamma(1,sp1,sp2),p);
+w=0.5;
+sig2=rinvgamma(1,r1,r2);
+cutoff=0.3
+
+
+z=matrix(as.numeric(runif(p*K)>w), p,K);
+mu=matrix(rnorm(p*K,0,1),p,K);
+H=sample(1:K, n, replace=T, prob=d)
+
+newp=reorder(mu,H,z,d);
+mu=newp$mu;
+H=newp$H;
+z=newp$z;
+d=newp$d;
+
+V=matrix(0,p,K); 
+
+X1<-X
+X1[X>0]=1
+
+J = matrix(0.01,p,K) # Initialization J 
+
+
+### Sampling Normalizing Constant of Q
+
+nSample <- 10 # Number of samples
+
+# Ising parameters:
+Graph <- matrix(sample(0:1,p^2,TRUE,prob = c(0.7, 0.3)),p,p) 
+Graph <- pmax(Graph,t(Graph)) 
+diag(Graph) <- 0
+Thresh <- 0#external fields
+
+# Response options (0,1 or -1,1):
+
+Resp <- c(0L,1L)
+JInt <- seq(0,1, by=0.001)
+nJS<-length(JInt+1)
+
+URj=rep(0,nJS)
+
+for (th in 1:nJS){
+Beta <- JInt[th]
+
+# Simulate with metropolis:
+MetData <- IsingSampler(nSample, Graph, Thresh, Beta, 300,
+responses = Resp, method = "MH")
+
+MetD0<-apply(MetData, 1, sum)
+
+#MetData
+
+URj[th]<-mean(MetD0) # Eq(12-1)
+
+} # for jj # Eq(12-1) in Smith and F. one time
+
+
+
+################## MCMC ##################
+for (iter in 1:(T0+T)){
+if (iter/100==round(iter/100,dig=0)) print(iter) # print number of itertations
+
+nk=rep(0,K);id=1:n;
+for(i in 1:n) {
+nk[H[i]]=nk[H[i]]+1
+} # n of k segment
+
+for(k in 1:K){
+idk=id[H==k]
+for(j in 1:p) 
+V[j,k]=sum(X[idk,j]^2)
+}
+
+setidS=array(0,c(p,p,K))
+
+########## sample sig2 #############
+
+res=0
+for(i in 1:n)
+res=res+(Y[i]-X[i,]%*%mu[,H[i]])^2;
+
+ap=n/2+r1;
+be=res/2+r2
+sig2=rinvgamma(1,ap,be);
+
+
+########## sample z and mu, w and tau_p2 #############
+#sample z and mu
+for (k in 1:K){
+idk=id[H==k]
+
+for (j in 1:p){
+
+if (length(idk)==0) {dis_mm<-rep(0,(p))} # for safety to keep MCMC chain
+if (length(idk)==1){ dis_mm<-sqrt((X1[idk,j]-X1[idk,])^2)}
+if (length(idk)>1) {dis_mm <- colSums(sqrt((X1[idk,j]-X1[idk,])^2))} #Euclidean distance
+
+thq<-quantile(dis_mm,cutoff) 
+
+setid<-which(dis_mm<thq) ## members of neighbors
+set <- z[setid,k] #a set of selected co-occuring words
+Zk_1 <- sum(set==1) #how many of selected neighbor words
+
+if(sum(setid)==0) {setidS[j,,k]<-0} else { 
+setidS[j,(1:length(setid)),k]<-setid} #save set id
+
+	# sample Z
+	eps = Y[idk]-X[idk,-j]%*%mu[-j,k];
+	tmpmean = sum(eps*X[idk,j])/sig2;
+	tmpvar = V[j,k]/sig2+1/tau2[j]; 
+	logr= (-J[j,k]*Zk_1) + log(V[j,k]*tau2[j]/sig2+1)/2 - tmpmean^2/tmpvar/2
+	if (logr>100) logr=100
+	z[j,k]=ifelse(runif(1)< 1/(1+exp(logr)),1,0);
+
+	# sample mu
+	if (z[j,k]==0) mu[j,k]=0 else {
+		bjmu = tmpmean/tmpvar;
+		mu[j,k]=rnorm(1,bjmu,1/sqrt(tmpvar))
+	}
+
+
+ind_old <- which(abs(JInt-J[j,k])==min(abs(JInt-J[j,k])))
+cj.old = sum(URj[1:ind_old])/sum(URj) #cj
+
+th_new = max(J[j,k]+rnorm(1,0,(0.01)^2),0) #proposing distr (Smith & F.) J is positive
+
+
+##  M-H coestimation algorithm for sampling J_kp
+## for compute new
+
+ind_new<-which(abs(JInt-th_new)==min(abs(JInt-th_new)))
+cj.new = sum(URj[1:ind_new])/sum(URj) #cj
+
+URj_p=0
+
+URj_p=URj_p+length(intersect(setidS[j,,k], which(z[,k]>0)))
+
+accrate=min(1,exp(cj.old-cj.new+(th_new-J[j,k])*(URj_p/K))); 
+
+lambda_vector = rep(0,T)
+
+u=runif(1)
+if (u<accrate){
+J[j,k] = th_new
+}
+
+
+}#for j
+}#for k
+
+#### sample J_kp by here ####
+
+##taup2
+at=rep(0,p)
+bt=rep(0,p)
+
+for (j in 1:p){
+aw1=sum(z[j,])
+bw1=(sum(mu[j,]^2))
+
+at[j]=aw1/2+sp1
+bt[j]=bw1*sum(z[j,])/2+sp2
+tau2[j]=rinvgamma(1,at[j],bt[j]);
+}
+
+
+########## sample H and d ##################
+d=as.vector(rdirichlet(1, nk+theta));
+
+wp=matrix(0,K,n);
+for(i in 1:n)
+for(k in 1:K)
+wp[k,i]=exp(-(Y[i]-X[i,]%*%mu[,k])^2/(2*sig2)) 
+
+for (k in 1:K)
+wp[k,]=wp[k,]*d[k]
+
+for (i in 1:n){
+H[i]=sample(1:K,1,replace=TRUE,wp[,i])
+}
+
+
+########## reordering ##################
+
+newp=reorder(mu,H,z,d);
+mu=newp$mu;
+H=newp$H;
+z=newp$z;
+d=newp$d;
+
+
+########## save posterior samples ########
+
+if(iter>T0){
+tmpT=iter-T0;
+postz[,,tmpT]=z;
+posttau2[tmpT,]=tau2
+postmu[,,tmpT]=mu;
+postw=c(postw,w);
+postsig2=c(postsig2,sig2)
+postd[tmpT,]=d
+postH[tmpT,]=H;
+postnk[tmpT,]=nk;
+
+postJ[,,tmpT]=J;
+
+setidT[,,,tmpT]<-setidS ## selected neighbors per each variable across all MCMC runs
+
+}
+
+
+} # End of MCMC
+
+
+## Posterior mean of beta ##
+
+ss=matrix(0,p,K) 
+for (i in 1:p)
+for (j in 1:K)
+{ 
+ss[i,j]=mean(postmu[i,j,])
+} 
+
+
+
+## Posterior mean of Z ##
+
+tt=matrix(0,p,K)
+for (i in 1:p)
+for (j in 1:K)
+{ 
+tt[i,j]=mean(postz[i,j,])
+}
+
+round(ss,1)
+
+## mean of lambda
+lambda=matrix(0,p,K) 
+for (i in 1:p)
+for (j in 1:K)
+{ 
+lambda[i,j]=mean(postJ[i,j,])
+} 
+
+
+#########################################
+## post-hoc searching         ###########
+## finding topics (neighbor structure)###
+#########################################
+
+p=dim(tt)[1]
+
+joint_D <- array(0,c(p,p,K)) 
+
+for (k in 1:K){
+for (j in 1:p){
+for (l in 1:p){
+joint_D [j,l,k] <- sum(setidT[j,,k,]==l)
+}
+}
+}
+
+for (k in 1:K)
+diag(joint_D[,,k])<-T ## segment-level neighbors
+
+## Heuristic Search ## 
+cut=0.95
+P_dim=array(0,c(p,p,K))
+S_sel=array(0,c(p,p,K))
+
+## find segmentment-level neighborsets!
+
+
+for (k in 1:K){
+for(j in 1:p){
+pdim = which(joint_D[j,,k] > (cut*T)) # probabilistic segment-level neighbors 
+sel_t <-which(tt[,k]>0.95)
+pdim0<-intersect(pdim,sel_t) # selected neighbors
+ssel<-setdiff(sel_t, pdim0)
+if(sum(pdim0)>0){
+P_dim[j,1:length(pdim0),k]<-pdim0} #Co-occuring selected variables; as cooccuring variables are active...
+if(sum(ssel)>0){
+S_sel[j,1:length(ssel),k]<-ssel
+} 
+}
+}
+
+#selected neighbors per each j word
+
+
+# DV: % of cooccuring variables are successfully recovered.
+
+
+
+############################################################
+#### Generating dendrogram of neighbors for each segment####
+############################################################
+
+
+#### for simulation data ####
+
+dist_R=rep(0,K)
+
+  par(mfrow = c(1, 2))
+
+for (k in 1:K){
+
+symm_M<-matrix(0,p,p)
+
+for (j in 1:p){
+
+tmp_i<- P_dim[j,,k]
+symm_M[j,tmp_i]=1
+
+}
+
+colnames(symm_M)<-as.character(1:p)
+rownames(symm_M)<-as.character(1:p)
+
+
+sel_t <-which(tt[,k]>0.95)
+
+symm_M0<-symm_M[sel_t[-1],sel_t[-1]] #### a matrix of the neighbor structure of selected variables
+
+## each row includes its selected neighbors in columns
+
+group.dist=rep(0,K)
+
+
+seg.dist1<-as.matrix(dist(symm_M0 ))
+
+
+dim(as.matrix(seg.dist1)) #distances between 300 members
+
+
+
+seg.hc<-hclust(as.dist(seg.dist1), method="complete")
+# complete linkage method evaluates the distance between every member
+plot(seg.hc) #resulting tree for all N=300 observations of seg.df.
+
+rect.hclust(seg.hc, k=2, border="red") ## dendrogram
+
+}
+
+
