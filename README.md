@@ -28,6 +28,10 @@ We developed user-friendly packages with a simple sample simulation data which c
 
 : This is a sample data. True parameter values are presented in the "2. Instruction script to run Topic-based Segmentation Packages.txt".
 
+(file) <i> web appendix M-H source code for coestimating tuning parameter.txt </i>
+
+: This is a source code for Metropolis Hastings algorithm for coestimating lambda (see Web Appendix B of the referred paper).
+
 <b> C. Empirical Studies of Customer-level Segmentation with YELP </b> (this folder includes 2 files)
 
 Note, given the dataset terms of use by YELP, we provide the link to download the same Yelp datasets (https://www.kaggle.com/datasets/yelp-dataset/yelp-dataset/versions/6) used in Kim et al. (2024). The provided codes below help replicate the customer-level segmentation results with the raw Yelp data downloaded from the link. 
