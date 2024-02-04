@@ -3,6 +3,7 @@
 
 
 library(tm)
+library(hunspell)
 
 business<-read.csv("yelp_business.csv",head=TRUE)
 reviews<-read.csv("yelp_review.csv",head=TRUE)
