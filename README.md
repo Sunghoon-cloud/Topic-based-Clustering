@@ -16,11 +16,11 @@ We developed user-friendly packages with a simple sample simulation data which c
  	
 : This is Instruction for running the two packages of "Package_Topic-based_Segmentation.R" and "Package_Dendrogram_Dimensions.R" with a simple sample data for helping any users to apply the model to their datasets.
 	
-  (file) <i> Package_Topic-based_Segmentation.R</i> 
+  (file) <i> Package_a_Topic-based_Segmentation.R</i> 
 
 : This is a function package for topic-based segmentation (i.e., latent class regression with group variable selection). [see Tables 5, 6, 7, and 10 in main text; Tables E-4, E-5, F-1, F-2, F-3, G-1, G-2, G-4 and G-5 in Web Appendices]
 
- (file)  <i> Package_Dendrogram_Dimensions.R</i>
+ (file)  <i> Package_b_Dendrogram_Dimensions.R</i>
 
 : This is a package for generating dendrogram for identifying topics.[see Figure 3 in main text; Figures F-1 and G-1 in Web Appendices]
 
