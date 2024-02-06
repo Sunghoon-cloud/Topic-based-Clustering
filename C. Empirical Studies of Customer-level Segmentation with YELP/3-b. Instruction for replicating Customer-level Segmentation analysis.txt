@@ -20,8 +20,8 @@ library(MCMCpack)
 ## Please download the following two R packages and import them  
 
 
-source("Package_a_Topic-based_Segmentation.R") ## R package for topic-based Segmentation model : Latent class regression with Group variable selection
-source("Package_b_Dendrogram_Dimensions.R")
+source("Package_MixtureRegression_GroupVariableSelection.R") ## R package for topic-based Segmentation model : Latent class regression with Group variable selection
+source("Dendrogram.R")
 
 
 
