@@ -58,8 +58,8 @@ library(MCMCpack)
 
 ## Please download the following two R packages and import them  
 
-source("Package_Topic-based_Segmentation.R") ## R package for topic-based Segmentation model : Latent class regression with Group variable selection
-source("Package_Dendrogram_Dimensions.R")
+source("Package_a_Topic-based_Segmentation.R") ## R package for topic-based Segmentation model : Latent class regression with Group variable selection
+source("Package_b_Dendrogram_Dimensions.R")
 
 
 data<-read.csv("sample_data.csv", head=TRUE) ## import dataset
@@ -67,7 +67,7 @@ data<-read.csv("sample_data.csv", head=TRUE) ## import dataset
 Y<-data[,1] #DV
 X<-as.matrix(data[,2:21]) ## independent variables
 
-## Plesae note, if you want to use your empirical data, you can add intercept by using following code
+## Plesae note, if you want to use your empirical data, you can add intercept by using following code:
 
 # X<-cbind(1, your_X.matrix)
 
@@ -100,4 +100,5 @@ Dendrograms(setidT,tt,K) ## generate dendrograms
 topic_result<-Topic_Bayes_Mixture(Y,X,K=2,T0=2000,T=2000,Opt_Hyper,LML)
 
 topic_result$LML # print LML value
+
 
