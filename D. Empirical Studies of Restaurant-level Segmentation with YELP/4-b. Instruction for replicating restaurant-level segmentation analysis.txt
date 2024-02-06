@@ -17,10 +17,8 @@ library(MCMCpack)
 
 ## Please download the following two R packages and import them  
 
-
-source("Package_a_Topic-based_Segmentation.R") ## R package for topic-based Segmentation model : Latent class regression with Group variable selection
-source("Package_b_Dendrogram_Dimensions.R")
-
+source("Package_MixtureRegression_GroupVariableSelection.R") ## R package for topic-based Segmentation model : Latent class regression with Group variable selection
+source("Dendrogram.R")
 
 
 Opt_Hyper<-(list("sp1"=1,"sp2"=1,"r1"=1,"r2"=0.01, "J" = 0.01, "cutoff"=0.5)) ## default setting, you can change the setting for hyperparameters.
