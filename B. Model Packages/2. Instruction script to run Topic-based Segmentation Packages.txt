@@ -67,7 +67,7 @@ data<-read.csv("sample_data.csv", head=TRUE) ## import dataset
 Y<-data[,1] #DV
 X<-as.matrix(data[,2:21]) ## independent variables
 
-## Plesae note, if you want to use your empirical data, you should add intercept by using following code
+## Plesae note, if you want to use your empirical data, you can add intercept by using following code
 
 # X<-cbind(1, your_X.matrix)
 
