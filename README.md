@@ -70,14 +70,11 @@ The provided codes below help replicate the restaurant-level segmentation result
 : This is data file of Ratings and word frequency matrix extracted from the Professor ratings reviews, which were scrapped by the author from ratemyprofessors.com.
 
 
-<b>DISCLAIMER</b> 
- 
-R packages and codes for Topic-based Segmentation Methods (Latent Class Regression with Group Variable Selections) are available in this repo (see reference article by Kim et al. (2024)). The packages include synthetic data for users to learn the use of the models. Also, this repo contains the code for data generation and link to download the example application Yelp data. 
+<b>Disclaimer</b> 
 
-We developed this R code to be as user-friendly as possible. However, a minimum familiarity with the R language and knowledge of statistics are assumed to properly import the data, run the model, and interpret the results. There is no in-built protection against misuse, and this code is offered without any guarantee.
+We developed these R packages and code to be as user-friendly as possible. However, a minimum familiarity with the R language and knowledge of statistics are assumed to properly import the data, run the model, and interpret the results. There is no in-built protection against misuse.
 
- 
 <b>Technical Help or Problem Report</b> 
 
-We are expecting the R codes to be easy to use and to be working well. Please send questions or report bugs to Sunghoon Kim (E-mail: Sunghoon.Kim@rutgers.edu). 
+We are expecting the R codes to be easy to use and to be working well. Please send questions or report bugs to Sunghoon Kim (E-mail: Sunghoon.Kim@rutgers.edu).
 
