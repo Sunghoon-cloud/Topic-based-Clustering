@@ -70,11 +70,11 @@ The provided codes below help replicate the restaurant-level segmentation result
 : This is data file of Ratings and word frequency matrix extracted from the Professor ratings reviews, which were scrapped by the author from ratemyprofessors.com.
 
 
-<b>Disclaimer</b> 
+<b>[Disclaimer]</b> 
 
 We developed these R packages and code to be as user-friendly as possible. However, a minimum familiarity with the R language and knowledge of statistics are assumed to properly import the data, run the model, and interpret the results. There is no in-built protection against misuse.
 
-<b>Technical Help or Problem Report</b> 
+<b>[Technical Help or Problem Report]</b> 
 
 We are expecting the R codes to be easy to use and to be working well. Please send questions or report bugs to Sunghoon Kim (E-mail: Sunghoon.Kim@rutgers.edu).
 
