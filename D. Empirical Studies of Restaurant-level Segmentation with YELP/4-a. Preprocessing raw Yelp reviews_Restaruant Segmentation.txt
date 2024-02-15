@@ -34,11 +34,8 @@ n=dim(Restaurants_AZ1)[1]
 ## preparing training dataset by combining restaurant profiles and reviews ##
 #############################################################################
 
-train.prop = .75 #set 75% for training dataset
-train.cases = sample(n, n*train.prop)
 
 data_trains2<-NULL
-data_valid2<-NULL
 
 for (i in 1:n){
 
@@ -48,15 +45,9 @@ bi<-which(Restaurants_AZ1[i,1]==reviews[,3])
 
 length(bi)
 
-train.cases<-sample(length(bi), length(bi)*train.prop) #sample for training data
-
 setreviews<-cbind(reviews[bi,],Restaurants_AZ1[i,2])
 
-class.train=setreviews[train.cases,]
-class.valid=setreviews[-train.cases,]
-
-data_trains2<-rbind(data_trains2, class.train)
-data_valid2<-rbind(data_valid2, class.valid)
+data_trains2<-rbind(data_trains2, setreviews)
 
 } # for each restaurant
 
@@ -247,7 +238,7 @@ TMDM_f <- TMDM0[,-which(remove_c==0)] ## remove any zero columns
 
 restaurant_yelp=cbind(TMDM_f,Data0[,-4]) #Combine word frequency matrix and restaruant-level ratings 
 
-write.csv(restaurant_yelp, "Restaurant_yelp.csv")
+write.csv(restaurant_yelp, "Restaurant_yelp215.csv")
 
 
 
