@@ -5,7 +5,7 @@
 # Let's import the preprocessed data
 Restaurant<-read.csv("restaurant_yelp.csv", head=TRUE)
 
-# X0<- word frequency matrix divided by total number of reviews (i.e., 'rating_number' column in the data) as indepenent variables (IV) matrix
+# X0<- word frequency matrix divided by "total number of reviews" for indepenent variables (IV) matrix
 # Y<- Restaurant$star_ratings of each restaurant as dependent variable matrix
 
 X<-as.matrix(cbind(1,X0)) # you should add intercept for your IVs. 
